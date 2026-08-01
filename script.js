@@ -20,11 +20,11 @@ function onDragStart (source, piece, position, orientation) {
 }
 
 function onDrop (source, target) {
-  // See if the move is legal
+  // Check if move is legal
   var move = game.move({
     from: source,
     to: target,
-    promotion: 'q' // Default auto-promote to Queen for simplicity
+    promotion: 'q' // Default auto-promote to Queen
   });
 
   // Illegal move
@@ -43,13 +43,13 @@ function updateStatus () {
   var moveColor = (game.turn() === 'w') ? 'White' : 'Black';
 
   if (game.in_checkmate()) {
-    status = 'Game over, ' + moveColor + ' is in checkmate.';
+    status = '🏆 Game over, ' + moveColor + ' is in checkmate!';
   } else if (game.in_draw()) {
-    status = 'Game over, drawn position';
+    status = '🤝 Game over, drawn position';
   } else {
-    status = moveColor + ' to move';
+    status = moveColor + "'s Turn";
     if (game.in_check()) {
-      status += ', ' + moveColor + ' is in check!';
+      status += ' — ⚠️ ' + moveColor + ' is in CHECK!';
     }
   }
 
@@ -78,6 +78,8 @@ function updateCaptured() {
 var config = {
   draggable: true,
   position: 'start',
+  // Smooth HD vector piece set
+  pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
   onDragStart: onDragStart,
   onDrop: onDrop,
   onSnapEnd: onSnapEnd
