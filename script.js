@@ -7,6 +7,16 @@ var $capturedBlack = $('#captured-black .pieces-list');
 var gameMode = 'bot';
 var selectedSquare = null;
 
+$('#gameModeSelect').on('change', function() {
+  gameMode = $(this).val();
+  game.reset();
+  board.position('start');
+  selectedSquare = null;
+  removeHighlights();
+  updateStatus();
+  updateCaptured();
+});
+
 var pieceSymbols = {
   p: '♟', r: '♜', n: '♞', b: '♝', q: '♛', k: '♚',
   P: '♙', R: '♖', N: '♘', B: '♗', Q: '♕', K: '♔'
@@ -61,13 +71,13 @@ function makeBotMove () {
   updateCaptured();
 }
 
-// PURE CLICK-TO-MOVE LOGIC
-function handleSquareClick (square) {
+// UNIVERSAL CLICK / TAP HANDLER FOR LAPTOP & MOBILE
+function processSquareClick (square) {
   if (gameMode === 'bot' && game.turn() === 'b') return;
 
   var pieceOnSquare = game.get(square);
 
-  // 1. If no piece is selected yet
+  // 1. If no piece selected yet, try to select one
   if (selectedSquare === null) {
     if (!pieceOnSquare) return;
     if ((game.turn() === 'w' && pieceOnSquare.color === 'w') ||
@@ -78,14 +88,14 @@ function handleSquareClick (square) {
     return;
   }
 
-  // 2. If clicking the same square, deselect
+  // 2. If clicking the same square, unselect
   if (selectedSquare === square) {
     selectedSquare = null;
     removeHighlights();
     return;
   }
 
-  // 3. Attempt the move
+  // 3. Try making the move from selectedSquare -> clicked square
   var move = game.move({
     from: selectedSquare,
     to: square,
@@ -93,7 +103,7 @@ function handleSquareClick (square) {
   });
 
   if (move === null) {
-    // If clicked another piece of the same color, switch selection
+    // If clicking another piece of our own color, switch selection to it
     if (pieceOnSquare && pieceOnSquare.color === game.turn()) {
       selectedSquare = square;
       showLegalMoves(square);
@@ -151,7 +161,7 @@ function updateCaptured() {
   });
 }
 
-// INITIALIZE BOARD WITH DRAGGING COMPLETELY OFF
+// BOARD CONFIGURATION (Dragging completely disabled)
 var config = {
   draggable: false,
   position: 'start',
@@ -160,12 +170,12 @@ var config = {
 
 board = Chessboard('myBoard', config);
 
-// BULLETPROOF TAP OVERLAY: Intercepts mobile touch/clicks before chessboard.js sees them
+// BIND TO BOTH MOUSE CLICKS AND TOUCH TAPS EQUALLY
 $(document).on('click', '#myBoard .square-55d63', function(e) {
-  e.stopPropagation();
+  e.preventDefault();
   var square = $(this).attr('data-square');
   if (square) {
-    handleSquareClick(square);
+    processSquareClick(square);
   }
 });
 
