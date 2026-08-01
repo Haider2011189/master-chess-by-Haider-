@@ -62,7 +62,7 @@ function makeBotMove () {
 }
 
 // CLICK / TAP TO MOVE LOGIC
-function handleSquareClick (square) {
+function handleSquareTap (square) {
   if (gameMode === 'bot' && game.turn() === 'b') return;
 
   var pieceOnSquare = game.get(square);
@@ -93,7 +93,7 @@ function handleSquareClick (square) {
   });
 
   if (move === null) {
-    // If clicked on another piece of same color, switch selection
+    // If tapped on another piece of same color, switch selection
     if (pieceOnSquare && pieceOnSquare.color === game.turn()) {
       selectedSquare = square;
       showLegalMoves(square);
@@ -104,7 +104,7 @@ function handleSquareClick (square) {
     return;
   }
 
-  // Success
+  // Move Succeeded
   board.position(game.fen());
   selectedSquare = null;
   removeHighlights();
@@ -114,34 +114,6 @@ function handleSquareClick (square) {
   if (gameMode === 'bot' && !game.game_over()) {
     window.setTimeout(makeBotMove, 300);
   }
-}
-
-function onDragStart (source, piece) {
-  if (game.game_over()) return false;
-  if (gameMode === 'bot' && game.turn() === 'b') return false;
-  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-    return false;
-  }
-}
-
-function onDrop (source, target) {
-  removeHighlights();
-  selectedSquare = null;
-
-  var move = game.move({ from: source, to: target, promotion: 'q' });
-  if (move === null) return 'snapback';
-
-  updateStatus();
-  updateCaptured();
-
-  if (gameMode === 'bot' && !game.game_over()) {
-    window.setTimeout(makeBotMove, 300);
-  }
-}
-
-function onSnapEnd () {
-  board.position(game.fen());
 }
 
 function updateStatus () {
@@ -179,21 +151,22 @@ function updateCaptured() {
   });
 }
 
+// INITIALIZE BOARD (DISABLE DRAGGABLE TO FORCE CLICK-TO-MOVE)
 var config = {
-  draggable: true,
+  draggable: false, // Disables native image dragging so mobile taps work instantly!
   position: 'start',
-  pieceTheme: customPieceTheme,
-  onDragStart: onDragStart,
-  onDrop: onDrop,
-  onSnapEnd: onSnapEnd
+  pieceTheme: customPieceTheme
 };
 
 board = Chessboard('myBoard', config);
 
-// Bind click handler directly to board squares for instant mobile taps
-$('#myBoard').on('click', '.square-55d63', function() {
+// DIRECT TAP / CLICK EVENT ATTACHMENT
+$('#myBoard').on('click pointerdown', '.square-55d63', function(e) {
+  e.preventDefault();
   var square = $(this).attr('data-square');
-  handleSquareClick(square);
+  if (square) {
+    handleSquareTap(square);
+  }
 });
 
 updateStatus();
