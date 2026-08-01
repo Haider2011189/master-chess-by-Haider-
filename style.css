@@ -1,17 +1,155 @@
-/* Prevent image context menus and text selection on mobile tap */
+/* ==========================================================================
+   MASTER CHESS - GLOBAL STYLES & LAYOUT
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px 10px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  color: #f39c12;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+header p {
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+/* ==========================================================================
+   GAME CONTAINER & BOARD
+   ========================================================================== */
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+#myBoard {
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 3px solid #333;
+}
+
+/* Prevent image context menus, popups, and accidental drags on mobile taps */
 #myBoard img {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
-  pointer-events: none; /* Allows click events to pass directly to the board square below */
+  pointer-events: none; /* Passes tap events directly to the board square below */
 }
 
-/* Highlight square styles */
+/* ==========================================================================
+   SQUARE HIGHLIGHTS & SELECTION STYLES
+   ========================================================================== */
+
+/* Highlight valid destination squares */
 .highlight-square {
   box-shadow: inset 0 0 3px 3px rgba(255, 255, 0, 0.75);
   background-color: rgba(255, 255, 0, 0.4) !important;
 }
 
+/* Highlight currently selected piece square */
 .selected-square {
   background-color: rgba(105, 146, 62, 0.8) !important;
+  box-shadow: inset 0 0 4px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   STATUS & CAPTURED PIECES DISPLAY
+   ========================================================================== */
+
+#status {
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #1e1e1e;
+  border-radius: 6px;
+  border: 1px solid #333;
+  color: #f39c12;
+}
+
+.captured-box {
+  width: 100%;
+  max-width: 440px;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 6px 0;
+  min-height: 42px;
+}
+
+.captured-box h3 {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pieces-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 1.3rem;
+  min-height: 24px;
+}
+
+/* ==========================================================================
+   RULE CARDS & INFO
+   ========================================================================== */
+
+.rule-card {
+  width: 100%;
+  max-width: 440px;
+  background-color: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #e0a96d;
+  margin-top: 15px;
+}
+
+.rule-card h3 {
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.rule-card p {
+  color: #cccccc;
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
