@@ -61,13 +61,13 @@ function makeBotMove () {
   updateCaptured();
 }
 
-// CLICK / TAP TO MOVE LOGIC
-function handleSquareTap (square) {
+// PURE CLICK-TO-MOVE LOGIC
+function handleSquareClick (square) {
   if (gameMode === 'bot' && game.turn() === 'b') return;
 
   var pieceOnSquare = game.get(square);
 
-  // 1. First selection
+  // 1. If no piece is selected yet
   if (selectedSquare === null) {
     if (!pieceOnSquare) return;
     if ((game.turn() === 'w' && pieceOnSquare.color === 'w') ||
@@ -78,14 +78,14 @@ function handleSquareTap (square) {
     return;
   }
 
-  // 2. Unselect if tapping same square
+  // 2. If clicking the same square, deselect
   if (selectedSquare === square) {
     selectedSquare = null;
     removeHighlights();
     return;
   }
 
-  // 3. Attempt move
+  // 3. Attempt the move
   var move = game.move({
     from: selectedSquare,
     to: square,
@@ -93,7 +93,7 @@ function handleSquareTap (square) {
   });
 
   if (move === null) {
-    // If tapped on another piece of same color, switch selection
+    // If clicked another piece of the same color, switch selection
     if (pieceOnSquare && pieceOnSquare.color === game.turn()) {
       selectedSquare = square;
       showLegalMoves(square);
@@ -104,7 +104,7 @@ function handleSquareTap (square) {
     return;
   }
 
-  // Move Succeeded
+  // Move successful!
   board.position(game.fen());
   selectedSquare = null;
   removeHighlights();
@@ -151,21 +151,21 @@ function updateCaptured() {
   });
 }
 
-// INITIALIZE BOARD (DISABLE DRAGGABLE TO FORCE CLICK-TO-MOVE)
+// INITIALIZE BOARD WITH DRAGGING COMPLETELY OFF
 var config = {
-  draggable: false, // Disables native image dragging so mobile taps work instantly!
+  draggable: false,
   position: 'start',
   pieceTheme: customPieceTheme
 };
 
 board = Chessboard('myBoard', config);
 
-// DIRECT TAP / CLICK EVENT ATTACHMENT
-$('#myBoard').on('click pointerdown', '.square-55d63', function(e) {
-  e.preventDefault();
+// BULLETPROOF TAP OVERLAY: Intercepts mobile touch/clicks before chessboard.js sees them
+$(document).on('click', '#myBoard .square-55d63', function(e) {
+  e.stopPropagation();
   var square = $(this).attr('data-square');
   if (square) {
-    handleSquareTap(square);
+    handleSquareClick(square);
   }
 });
 
