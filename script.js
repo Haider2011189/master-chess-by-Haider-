@@ -78,8 +78,8 @@ function updateCaptured() {
 var config = {
   draggable: true,
   position: 'start',
-  // Smooth HD vector piece set
-  pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+  // HIGH-RES WORKING PIECE THEME (Lichess Cesta Set):
+  pieceTheme: 'https://raw.githubusercontent.com/lichess-org/lila/master/public/piece/cesta/{piece}.svg',
   onDragStart: onDragStart,
   onDrop: onDrop,
   onSnapEnd: onSnapEnd
