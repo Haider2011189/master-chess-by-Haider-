@@ -153,3 +153,10 @@ header p {
   font-size: 0.88rem;
   line-height: 1.4;
 }
+/* Force board squares to capture taps cleanly */
+#myBoard .square-55d63 {
+  cursor: pointer;
+}
+#myBoard img {
+  pointer-events: none; /* Stops the image from blocking your tap */
+}
