@@ -1,47 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Chess by Haider</title>
-    
-    <!-- CSS Styles -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
-    
-    <!-- Google Fonts for stylish text -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- jQuery and Chess Libraries -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Chess</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chessboard.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- jQuery, Chessboard.js & Chess.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 </head>
 <body>
 
-    <header class="header-container">
-        <h1 class="main-title">Master Chess</h1>
-        <p class="author-badge">Designed & Developed by <span>HAIDER</span></p>
-    </header>
+  <header class="header-container">
+    <h1 class="main-title">Master Chess</h1>
+    <p class="author-badge">Designed & Developed by <span>HAIDER</span></p>
+  </header>
 
-    <div id="myBoard"></div>
-    <div class="rules-section" style="margin: 20px; padding: 15px; background-color: #ffffff; color: #000000; border-radius: 8px;">
-  <h2>How to Play Chess</h2>
-  <ul>
-    <li><b>Objective:</b> Checkmate your opponent's King so it cannot escape capture.</li>
-    <li><b>Pawns:</b> Move forward 1 square (or 2 squares on their first move); capture diagonally.</li>
-    <li><b>Rooks:</b> Move horizontally or vertically any number of squares.</li>
-    <li><b>Knights:</b> Move in an "L" shape (2 squares one way, 1 square to the side). Knights can jump over other pieces.</li>
-    <li><b>Bishops:</b> Move diagonally any number of squares.</li>
-    <li><b>Queen:</b> Moves horizontally, vertically, or diagonally any number of squares.</li>
-    <li><b>King:</b> Moves 1 square in any direction. Protect him at all costs!</li>
-  </ul>
-</div>
+  <main class="game-wrapper">
+    <!-- Captured White Pieces (Left Panel) -->
+    <div class="captured-panel" id="captured-white">
+      <h3>Captured (White)</h3>
+      <div class="pieces-list"></div>
+    </div>
 
-    <!-- Game Logic Script -->
-    <script src="script.js"></script>
+    <!-- Main Board -->
+    <div class="board-container">
+      <div id="myBoard"></div>
+      <div class="status-bar" id="status">Status: White to move</div>
+    </div>
 
+    <!-- Captured Black Pieces (Right Panel) -->
+    <div class="captured-panel" id="captured-black">
+      <h3>Captured (Black)</h3>
+      <div class="pieces-list"></div>
+    </div>
+  </main>
+
+  <!-- Complete Rules Section -->
+  <section class="rules-container">
+    <h2>♟️ How to Play Master Chess (Official Rules)</h2>
+    <div class="rules-grid">
+      <div class="rule-card">
+        <h3>🎯 Objective</h3>
+        <p>Checkmate your opponent's King. Checkmate occurs when the King is under attack (in check) and has no legal move to escape capture.</p>
+      </div>
+
+      <div class="rule-card">
+        <h3>♟️ Pawn Rules</h3>
+        <p>Pawns move forward <b>1 square</b>. On their very first move, they can move <b>2 squares forward</b>. Pawns capture diagonally forward 1 square. If a pawn reaches the opposite end of the board, it promotes to a Queen, Rook, Bishop, or Knight.</p>
+      </div>
+
+      <div class="rule-card">
+        <h3>♜ Rook & ♝ Bishop</h3>
+        <p><b>Rooks</b> move horizontally or vertically any number of squares.<br><b>Bishops</b> move diagonally any number of open squares.</p>
+      </div>
+
+      <div class="rule-card">
+        <h3>♞ Knight (The Jumper)</h3>
+        <p>Knights move in an "L" shape (2 squares in one direction, 1 square perpendicular). The Knight is the only piece that can jump over other pieces!</p>
+      </div>
+
+      <div class="rule-card">
+        <h3>♛ Queen & ♚ King</h3>
+        <p><b>Queen:</b> The most powerful piece. Moves any number of squares horizontally, vertically, or diagonally.<br><b>King:</b> Moves 1 square in any direction. Never let your King get captured!</p>
+      </div>
+
+      <div class="rule-card">
+        <h3>⚔️ Special Moves</h3>
+        <p><b>Castling:</b> Move your King 2 squares towards a Rook, and the Rook hops next to the King (if neither piece has moved yet and no pieces are in between).<br><b>En Passant:</b> Capture an opposing pawn that just moved 2 squares forward past yours.</p>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
 </body>
 </html>
