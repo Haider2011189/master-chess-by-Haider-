@@ -9,26 +9,12 @@ var pieceSymbols = {
   P: '♙', R: '♖', N: '♘', B: '♗', Q: '♕', K: '♔'
 };
 
-// Explicit Wikimedia SVG mapping to guarantee pieces load without CORS blocks
+// Points directly to default Chessboard.js hosted pieces
 function customPieceTheme (piece) {
-  var pieces = {
-    'wP': 'https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg',
-    'wR': 'https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg',
-    'wN': 'https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg',
-    'wB': 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg',
-    'wQ': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg',
-    'wK': 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
-    'bP': 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg',
-    'bR': 'https://upload.wikimedia.org/wikipedia/commons/ff/ff/Chess_rdt45.svg',
-    'bN': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_ndt45.svg',
-    'bB': 'https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg',
-    'bQ': 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg',
-    'bK': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg'
-  };
-  return pieces[piece];
+  return 'https://chessboardjs.com/img/chesspieces/wikipedia/' + piece + '.png';
 }
 
-// --- HIGHLIGHTING LOGIC ---
+// HIGHLIGHTING LOGIC
 function removeHighlights () {
   $('#myBoard .square-55d63').removeClass('highlight-square');
 }
@@ -45,13 +31,13 @@ function onMouseoverSquare (square, piece) {
     verbose: true
   });
 
-  // Exit if there are no moves available for this square
+  // Exit if there are no legal moves available
   if (moves.length === 0) return;
 
-  // Highlight the square being hovered
+  // Highlight the hovered square
   highlightSquare(square);
 
-  // Highlight all possible destination squares
+  // Highlight all valid destination squares
   for (var i = 0; i < moves.length; i++) {
     highlightSquare(moves[i].to);
   }
@@ -61,7 +47,7 @@ function onMouseoutSquare (square, piece) {
   removeHighlights();
 }
 
-// --- GAMEPLAY LOGIC ---
+// GAMEPLAY LOGIC
 function onDragStart (source, piece, position, orientation) {
   if (game.game_over()) return false;
 
@@ -79,10 +65,10 @@ function onDrop (source, target) {
   var move = game.move({
     from: source,
     to: target,
-    promotion: 'q' // Default auto-promote to Queen
+    promotion: 'q' // Auto-promote to queen
   });
 
-  // Illegal move
+  // If illegal, snap back
   if (move === null) return 'snapback';
 
   updateStatus();
@@ -128,7 +114,7 @@ function updateCaptured() {
   });
 }
 
-// Board Configuration
+// CONFIGURATION
 var config = {
   draggable: true,
   position: 'start',
