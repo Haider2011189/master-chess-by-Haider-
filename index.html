@@ -86,3 +86,10 @@
   <script src="script.js"></script>
 </body>
 </html>
+<div style="text-align: center; margin: 15px 0;">
+  <label for="gameModeSelect" style="color: #fff; font-weight: bold; margin-right: 8px;">Mode:</label>
+  <select id="gameModeSelect" onchange="gameMode = this.value; game.reset(); board.start(); updateStatus();" style="padding: 6px 12px; border-radius: 6px; font-size: 1rem; background: #222; color: #fff; border: 1px solid #555;">
+    <option value="bot">Play vs Computer</option>
+    <option value="friend">Play vs Friend</option>
+  </select>
+</div>
